@@ -5,9 +5,10 @@ from . import models
 
 @admin.register(models.BotMessagesSettingsModel)
 class BotMessagesSettingsAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('user', 'bot_username')
 
 
 @admin.register(models.TelegramBotClientModel)
 class TelegramBotClientAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('user', 'phone_or_nickname')
+    readonly_fields = ('created_at', 'updated_at')
