@@ -34,56 +34,62 @@ def start_funnel_dialog(message: Message):
 
 
 def first_question_handler(query: CallbackQuery):
-    chat_id = query.from_user.id
-    bot_username = get_bot_query_argument(query)
-    last_message_id = TelegramBotClientModel.objects.get(
-        chat_id=chat_id
-    ).last_message_id
-    bot_messages_settings = BotMessagesSettingsModel.objects.get(
-        bot_username=bot_username
-    )
-    first_question_text = bot_messages_settings.first_question_text
-    bot.edit_message_text(
-        text=first_question_text,
-        chat_id=chat_id,
-        message_id=last_message_id
-    )
-    bot.edit_message_reply_markup(
-        chat_id=chat_id,
-        message_id=last_message_id,
-        reply_markup=bot_messages_settings.get_first_question_markup()
-    )
+    try:
+        chat_id = query.from_user.id
+        bot_username = get_bot_query_argument(query)
+        last_message_id = TelegramBotClientModel.objects.get(
+            chat_id=chat_id
+        ).last_message_id
+        bot_messages_settings = BotMessagesSettingsModel.objects.get(
+            bot_username=bot_username
+        )
+        first_question_text = bot_messages_settings.first_question_text
+        bot.edit_message_text(
+            text=first_question_text,
+            chat_id=chat_id,
+            message_id=last_message_id
+        )
+        bot.edit_message_reply_markup(
+            chat_id=chat_id,
+            message_id=last_message_id,
+            reply_markup=bot_messages_settings.get_first_question_markup()
+        )
+    except Exception as e:
+        print(e)
 
 
 def second_question_handler(query: CallbackQuery):
-    chat_id = query.from_user.id
-    bot_username = get_bot_query_argument(query, 1)
+    try:
+        chat_id = query.from_user.id
+        bot_username = get_bot_query_argument(query, 1)
 
-    bot_client = TelegramBotClientModel.objects.get(chat_id=chat_id)
-    bot_client.first_answer = get_bot_query_argument(query)
-    bot_client.bot_wait_input_username = bot_username
-    bot_client.save()
+        bot_client = TelegramBotClientModel.objects.get(chat_id=chat_id)
+        bot_client.first_answer = get_bot_query_argument(query)
+        bot_client.bot_wait_input_username = bot_username
+        bot_client.save()
 
-    bot_messages_settings = BotMessagesSettingsModel.objects.get(
-        bot_username=bot_username
-    )
-    second_question_text = bot_messages_settings.second_question_text
-    bot.delete_message(
-        chat_id=chat_id,
-        message_id=bot_client.last_message_id
-    )
-    sended_message = bot.send_message(
-        chat_id=chat_id,
-        text=second_question_text
-    )
-    set_last_message_id(
-        chat_id=chat_id,
-        sended_message=sended_message
-    )
-    bot.register_next_step_handler_by_chat_id(
-        chat_id=chat_id,
-        callback=second_question_input_message_handler
-    )
+        bot_messages_settings = BotMessagesSettingsModel.objects.get(
+            bot_username=bot_username
+        )
+        second_question_text = bot_messages_settings.second_question_text
+        bot.delete_message(
+            chat_id=chat_id,
+            message_id=bot_client.last_message_id
+        )
+        sended_message = bot.send_message(
+            chat_id=chat_id,
+            text=second_question_text
+        )
+        set_last_message_id(
+            chat_id=chat_id,
+            sended_message=sended_message
+        )
+        bot.register_next_step_handler_by_chat_id(
+            chat_id=chat_id,
+            callback=second_question_input_message_handler
+        )
+    except Exception as e:
+        raise e
 
 
 def second_question_input_message_handler(message: Message):
@@ -94,7 +100,7 @@ def second_question_input_message_handler(message: Message):
         bot_client.save()
         third_question_handler(message)
     except Exception as e:
-        print(e)
+        raise e
 
 
 def third_question_handler(message: Message):
@@ -102,7 +108,7 @@ def third_question_handler(message: Message):
         chat_id = message.chat.id
         bot_client = TelegramBotClientModel.objects.get(chat_id=chat_id)
         bot_messages_settings = BotMessagesSettingsModel.objects.get(
-            clients__bot_wait_input_username=bot_client.bot_wait_input_username
+            bot_username=bot_client.bot_wait_input_username
         )
         third_question_text = bot_messages_settings.third_question_text
         bot.delete_message(
@@ -138,7 +144,7 @@ def after_loading_questions_data_handler(message: Message):
         bot_client = TelegramBotClientModel.objects.get(chat_id=message.chat.id)
         
         bot_messages_settings = BotMessagesSettingsModel.objects.get(
-            clients__bot_wait_input_username=bot_client.bot_wait_input_username
+            bot_username=bot_client.bot_wait_input_username
         )
         after_loading_questions_data_text = bot_messages_settings.after_data_loading_text
         bot.delete_message(

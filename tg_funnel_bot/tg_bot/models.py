@@ -179,7 +179,6 @@ class TelegramBotClientModel(models.Model):
     bot_wait_input_username = models.CharField(
         _('Имя бота, который ждёт входные данные'),
         max_length=200,
-        unique=True,
         null=True,
         blank=True
     )
