@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'django_better_admin_arrayfield',
 
     'tg_bot',
     'account',
@@ -147,3 +148,6 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': tz.timedelta(minutes=2)
     }
 }
+
+HOST_BASE_URL = 'http://127.0.0.1:8000/'
+TELEGRAM_BOT_URL = 'https://t.me/Sjjxhskbot/'
