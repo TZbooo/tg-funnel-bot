@@ -190,10 +190,6 @@ class TelegramBotClientModel(models.Model):
         blank=True
     )
 
-    free_rate = models.BooleanField(
-        _('Бесплатный тариф'),
-        default=True
-    )
     sent_messages_for_inactive_count = models.IntegerField(default=0)
 
     def __str__(self):

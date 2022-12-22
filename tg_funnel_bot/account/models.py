@@ -13,6 +13,10 @@ class CustomUser(AbstractUser):
     unhashed_password = models.CharField(
         max_length=20
     )
+    free_rate = models.BooleanField(
+        _('Бесплатный тариф'),
+        default=True
+    )
 
     def get_bots_urls_menu_message_markup(self) -> InlineKeyboardMarkup:
         markup = InlineKeyboardMarkup()
