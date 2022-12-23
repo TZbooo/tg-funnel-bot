@@ -3,7 +3,7 @@ Description=hermes telegram django bot
 
 [Service]
 User=root
-WorkingDirectory=/root/telegram-bots/hermes/
+WorkingDirectory=/root/telegram-bots/hermes/tg_funnel_bot/
 ExecStart=/bin/bash -c "venv/bin/gunicorn --bind 0.0.0.0:8000 tg_funnel_bot.wsgi:application"
 
 [Install]
