@@ -1,0 +1,10 @@
+[Unit]
+Description=hermes telegram django bot
+
+[Service]
+User=root
+WorkingDirectory=/root/telegram-bots/hermes/
+ExecStart=/bin/bash -c "make cmd=\"runserver 0.0.0.0:8000\""
+
+[Install]
+WantedBy=multi-user.target
