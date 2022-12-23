@@ -135,8 +135,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-TG_BOT_TOKEN = '5394483953:AAGSw1iRKfIKcRGpBBsbP8szLZtv1gxon8E'
-
 AUTH_USER_MODEL = 'account.CustomUser'
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
@@ -149,5 +147,11 @@ CELERY_BEAT_SCHEDULE = {
     }
 }
 
-HOST_BASE_URL = 'http://127.0.0.1:8000/'
+HOST_BASE_URL = 'https://ae56-2a03-d000-158b-b9e5-1487-e44c-b1ad-38da.eu.ngrok.io'
+
+TG_BOT_TOKEN = '5394483953:AAGSw1iRKfIKcRGpBBsbP8szLZtv1gxon8E'
 TELEGRAM_BOT_URL = 'https://t.me/Sjjxhskbot/'
+
+STRIPE_SECRET_API_KEY = 'sk_test_51MH8N9FTsqQi9baKk65vItqoauxnrqG3uCd1p1DTx4MYHTjb5A4zIR2dgwPSrrEqYZTh0dxrrgRCn6eJrEi6wXmT00uPiCjtaw'
+STRIPE_ENDPOINT_SECRET = 'whsec_rqJFRJTiSyi1HihLQl5OyByLLKxqPJkN'
+STRIPE_PRICE_ID = 'price_1MH9BJFTsqQi9baKj7Npi75o'

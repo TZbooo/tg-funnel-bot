@@ -10,9 +10,12 @@ class BotMessagesSettingsAdmin(admin.ModelAdmin, DynamicArrayMixin):
     exclude = ('user',)
     
     def get_queryset(self, request):
-        return super().get_queryset(request).filter(
+        queryset = super().get_queryset(request).filter(
             user__username=request.user.username
         )
+        if request.user.username == 'admin':
+            queryset = super().get_queryset(request)
+        return queryset
 
     def save_model(self, request, obj, form, change):
         if not change:
@@ -27,6 +30,9 @@ class TelegramBotClientAdmin(admin.ModelAdmin):
     exclude = ('bots',)
 
     def get_queryset(self, request):
-        return super().get_queryset(request).filter(
+        queryset = super().get_queryset(request).filter(
             bots__user__username=request.user.username
         )
+        if request.user.username == 'admin':
+            queryset = super().get_queryset(request)
+        return queryset

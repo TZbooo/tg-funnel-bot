@@ -1,10 +1,13 @@
 import django.utils.timezone as tz
+from django.conf import settings
+from django.contrib.auth import get_user_model
 from telebot.types import Update
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from celery import shared_task
 
 from tg_funnel_bot.bot import bot
+from tg_funnel_bot.stripe import stripe
 from .models import TelegramBotClientModel
 from .utils import get_bot_command_argument
 
@@ -14,7 +17,8 @@ from .handlers.rent import (
     get_bots_urls_menu,
     back_to_rent_menu,
     start_rent_new_bot,
-    get_account
+    get_account,
+    pay_for_bot
 )
 from .handlers.client import (
     start_funnel_dialog,
@@ -24,6 +28,7 @@ from .handlers.client import (
 )
 
 
+# funnel dialog handlers
 bot.register_message_handler(
     callback=start_funnel_dialog,
     commands=['start'],
@@ -38,6 +43,7 @@ bot.register_callback_query_handler(
     func=lambda query: 'first' in query.data
 )
 
+# rent menu handlers
 bot.register_message_handler(
     callback=start_rent,
     commands=['start'],
@@ -63,9 +69,13 @@ bot.register_callback_query_handler(
     callback=get_account,
     func=lambda query: query.data == 'get_account'
 )
+bot.register_callback_query_handler(
+    callback=pay_for_bot,
+    func=lambda query: query.data == 'pay_for_bot'
+)
 
 
-class UpdatesHandlerBotAPIView(APIView):
+class TelegramUpdatesAPIView(APIView):
     def post(self, request):
         json_data = request.body.decode('UTF-8')
         update_data = Update.de_json(json_data)
@@ -83,7 +93,33 @@ class UpdatesHandlerBotAPIView(APIView):
                 no_nick_or_phone_clients.update(sent_messages_for_inactive_count=0)
                 tg_nick_or_phone_input_handler(update_data.message)
 
-        return Response({'code': 200})
+        return Response(status=200)
+
+
+class StripeUpdatesAPIView(APIView):
+    def post(self, request):
+        event = None
+        payload = request.body.decode('utf-8')
+        if settings.STRIPE_ENDPOINT_SECRET:
+            sig_header = request.headers.get('stripe-signature')
+            try:
+                event = stripe.Webhook.construct_event(
+                    payload, sig_header, settings.STRIPE_ENDPOINT_SECRET
+                )
+            except stripe.error.SignatureVerificationError as e:
+                return Response(status=400)
+
+        if event['type'] == 'checkout.session.completed':
+            payment_method = event['data']['object']
+            bots_owner_chat_id = payment_method['metadata']['bots_owner_id']
+            print(bots_owner_chat_id)
+            print(event['data'])
+            User = get_user_model()
+            User.objects.get(
+                owner_chat_id=bots_owner_chat_id
+            ).switch_to_paid_rate().save()
+
+        return Response(status=200)
 
 
 @shared_task(name='send_certain_messages_for_inactive_users')

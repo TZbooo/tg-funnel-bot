@@ -21,7 +21,7 @@ start_rent_markup = InlineKeyboardMarkup(keyboard=[
     [
         InlineKeyboardButton(
             text='оплатить подписку',
-            callback_data='pay for a subscription'
+            callback_data='pay_for_bot',
         ),
         InlineKeyboardButton(
             text='мой аккаунт',

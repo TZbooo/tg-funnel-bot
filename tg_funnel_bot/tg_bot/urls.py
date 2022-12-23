@@ -4,5 +4,6 @@ from . import views
 
 
 urlpatterns = [
-    path('webhook/', views.UpdatesHandlerBotAPIView.as_view(), name='update')
+    path('telegram-webhooks/', views.TelegramUpdatesAPIView.as_view(), name='telegram-updates'),
+    path('stripe-updates/', views.StripeUpdatesAPIView.as_view(), name='stripe-updates'),
 ]

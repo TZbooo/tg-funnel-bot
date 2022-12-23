@@ -130,6 +130,10 @@ class BotMessagesSettingsModel(models.Model):
             ]
         ])
 
+    class Meta:
+        verbose_name = _('Настройки твоего бота')
+        verbose_name_plural = _('Настройки твоих ботов')
+
     def __str__(self):
         return f'имя бота {self.bot_username}, имя мастера {self.user.username}'
 
@@ -191,6 +195,10 @@ class TelegramBotClientModel(models.Model):
     )
 
     sent_messages_for_inactive_count = models.IntegerField(default=0)
+
+    class Meta:
+        verbose_name = _('Данные клиента твоего бота')
+        verbose_name_plural = _('Данные клиентов твоих ботов')
 
     def __str__(self):
         return f'{self.phone_or_nickname}'
