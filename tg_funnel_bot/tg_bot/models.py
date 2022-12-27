@@ -2,8 +2,9 @@ from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 from django.db import models
 from django.urls import reverse
 from django.conf import settings
-from django_better_admin_arrayfield.models.fields import ArrayField
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
+from django_better_admin_arrayfield.models.fields import ArrayField
 
 from account.models import CustomUser
 
@@ -129,6 +130,15 @@ class BotMessagesSettingsModel(models.Model):
                 )
             ]
         ])
+
+    def clean(self) -> None:
+        if len(set((
+            self.first_question_text,
+            self.second_question_text,
+            self.third_question_text
+        ))) < 3:
+            raise ValidationError(_('Вопросы должны быть не одинаковы'))
+        return super().clean()
 
     class Meta:
         verbose_name = _('Настройки твоего бота')
