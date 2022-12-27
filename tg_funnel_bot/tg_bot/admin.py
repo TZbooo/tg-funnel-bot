@@ -26,8 +26,8 @@ class BotMessagesSettingsAdmin(admin.ModelAdmin, DynamicArrayMixin):
 @admin.register(models.TelegramBotClientModel)
 class TelegramBotClientAdmin(admin.ModelAdmin):
     list_display = ('phone_or_nickname',)
+    list_filter = ('bots',)
     readonly_fields = ('created_at', 'updated_at')
-    exclude = ('bots',)
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request).filter(

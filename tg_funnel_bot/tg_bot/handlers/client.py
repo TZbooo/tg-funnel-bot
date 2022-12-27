@@ -16,7 +16,9 @@ def start_funnel_dialog(message: Message):
     try:
         chat_id = message.chat.id
         bot_messages_settings = register_new_bot_user(message)
-        admin_user = get_user_model().objects.get(username__in=settings.ADMIN_USERS)
+        admin_user = get_user_model().objects.filter(
+            username__in=settings.ADMIN_USERS
+        ).first()
         start_message = bot_messages_settings.start_message
 
         sended_message = bot.send_message(

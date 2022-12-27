@@ -34,6 +34,7 @@ class CustomUser(AbstractUser):
         default=True
     )
     add_message = models.TextField(max_length=4000)
+    faq_url = models.URLField(max_length=200)
 
     @end_with_back_to_rent_menu_inline_button
     def get_bots_urls_menu_message_markup(self) -> InlineKeyboardMarkup:

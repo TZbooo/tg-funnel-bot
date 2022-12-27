@@ -27,12 +27,6 @@ start_rent_markup = InlineKeyboardMarkup(keyboard=[
             text='мой аккаунт',
             callback_data='get_account'
         )
-    ],
-    [
-        InlineKeyboardButton(
-            text='faq',
-            callback_data='get_faq'
-        )
     ]
 ])
 

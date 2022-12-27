@@ -145,7 +145,7 @@ class BotMessagesSettingsModel(models.Model):
         verbose_name_plural = _('Настройки твоих ботов')
 
     def __str__(self):
-        return f'имя бота {self.bot_username}, имя мастера {self.user.username}'
+        return f'имя бота {self.bot_username}'
 
 
 class TelegramBotClientModel(models.Model):
