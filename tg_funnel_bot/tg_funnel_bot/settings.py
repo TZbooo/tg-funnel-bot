@@ -35,6 +35,7 @@ SECRET_KEY = 'django-insecure-84=8_r%9%o#$-$s#vx!@(s7sv*l#@0(15-c5*_8_1dj4@zx1fu
 DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://hermesbot.top', 'http://127.0.0.1', 'http://localhost']
 
 
 # Application definition
