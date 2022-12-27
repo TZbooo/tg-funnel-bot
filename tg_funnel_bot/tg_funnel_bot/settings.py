@@ -13,11 +13,17 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 
 import django.utils.timezone as tz
+import environ
 
+
+env = environ.Env(
+    DEBUG=(bool, False)
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+environ.Env.read_env(BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -26,7 +32,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-84=8_r%9%o#$-$s#vx!@(s7sv*l#@0(15-c5*_8_1dj4@zx1fu'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
@@ -148,11 +154,13 @@ CELERY_BEAT_SCHEDULE = {
     }
 }
 
-HOST_BASE_URL = 'https://ae56-2a03-d000-158b-b9e5-1487-e44c-b1ad-38da.eu.ngrok.io'
+HOST_BASE_URL = 'https://hermesbot.top'
 
 TG_BOT_TOKEN = '5394483953:AAGSw1iRKfIKcRGpBBsbP8szLZtv1gxon8E'
 TELEGRAM_BOT_URL = 'https://t.me/Sjjxhskbot/'
 
-STRIPE_SECRET_API_KEY = 'sk_test_51IPYqkIjpOBFUJM9GMP09RrO44DYvObACNB7gQSWGmNr9ZoGbDHXZRBfPVgGTkdseeYxG0z33Xec4DhgVZUkj2wy00wh1udWTb'
-STRIPE_ENDPOINT_SECRET = 'whsec_rqJFRJTiSyi1HihLQl5OyByLLKxqPJkN'
-STRIPE_PRICE_ID = 'price_1MHvNhIjpOBFUJM9E9F12TmC'
+STRIPE_SECRET_API_KEY = env('STRIPE_SECRET_API_KEY')
+STRIPE_ENDPOINT_SECRET = env('STRIPE_WEBHOOK_ENDPOINT_SECRET')
+STRIPE_PRICE_ID = env('STRIPE_PRICE_ID')
+
+ADMIN_USERS = ['admin']

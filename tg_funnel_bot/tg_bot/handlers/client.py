@@ -1,5 +1,7 @@
 
 from telebot.types import Message, CallbackQuery
+from django.contrib.auth import get_user_model
+from django.conf import settings
 
 from tg_funnel_bot.bot import bot
 from ..models import BotMessagesSettingsModel, TelegramBotClientModel
@@ -14,17 +16,19 @@ def start_funnel_dialog(message: Message):
     try:
         chat_id = message.chat.id
         bot_messages_settings = register_new_bot_user(message)
+        admin_user = get_user_model().objects.get(username__in=settings.ADMIN_USERS)
         start_message = bot_messages_settings.start_message
 
-        bot.delete_message(
-            chat_id=chat_id,
-            message_id=message.id
-        )
         sended_message = bot.send_message(
             chat_id=chat_id,
             text=start_message,
             reply_markup=bot_messages_settings.get_start_message_markup()
         )
+        if bot_messages_settings.user.is_free_rate:
+            bot.send_message(
+                chat_id=chat_id,
+                text=admin_user.add_message
+            )
         set_last_message_id(
             chat_id=chat_id,
             sended_message=sended_message
@@ -37,9 +41,6 @@ def first_question_handler(query: CallbackQuery):
     try:
         chat_id = query.from_user.id
         bot_username = get_bot_query_argument(query)
-        last_message_id = TelegramBotClientModel.objects.get(
-            chat_id=chat_id
-        ).last_message_id
         bot_messages_settings = BotMessagesSettingsModel.objects.get(
             bot_username=bot_username
         )
@@ -47,11 +48,11 @@ def first_question_handler(query: CallbackQuery):
         bot.edit_message_text(
             text=first_question_text,
             chat_id=chat_id,
-            message_id=last_message_id
+            message_id=query.message.message_id
         )
         bot.edit_message_reply_markup(
             chat_id=chat_id,
-            message_id=last_message_id,
+            message_id=query.message.message_id,
             reply_markup=bot_messages_settings.get_first_question_markup()
         )
     except Exception as e:
@@ -74,7 +75,7 @@ def second_question_handler(query: CallbackQuery):
         second_question_text = bot_messages_settings.second_question_text
         bot.delete_message(
             chat_id=chat_id,
-            message_id=bot_client.last_message_id
+            message_id=query.message.message_id
         )
         sended_message = bot.send_message(
             chat_id=chat_id,

@@ -16,10 +16,6 @@ def start_rent(message: Message):
         chat_id = message.chat.id
         User = get_user_model()
 
-        bot.delete_message(
-            chat_id=chat_id,
-            message_id=message.id
-        )
         sended_message = bot.send_message(
             chat_id=chat_id,
             text='rent',
@@ -48,11 +44,7 @@ def back_to_rent_menu(query: CallbackQuery):
     bot.edit_message_text(
         chat_id=chat_id,
         message_id=query.message.message_id,
-        text='rent'
-    )
-    bot.edit_message_reply_markup(
-        chat_id=chat_id,
-        message_id=query.message.message_id,
+        text='rent',
         reply_markup=start_rent_markup
     )
 
@@ -72,10 +64,6 @@ def get_account(query: CallbackQuery):
                 f'{rate_information}')
         bot.edit_message_text(
             text=text,
-            chat_id=chat_id,
-            message_id=query.message.message_id,
-        )
-        bot.edit_message_reply_markup(
             chat_id=chat_id,
             message_id=query.message.message_id,
             reply_markup=only_back
@@ -122,12 +110,15 @@ def get_bots_change_menu(query: CallbackQuery):
 
 
 def pay_for_bot(query: CallbackQuery):
-    User = get_user_model()
-    chat_id = query.from_user.id
-    bots_onwer = User.objects.get(owner_chat_id=chat_id)
-    
-    bot.edit_message_reply_markup(
-        chat_id=chat_id,
-        message_id=query.message.message_id,
-        reply_markup=bots_onwer.get_payment_link_menu()
-    )
+    try:
+        User = get_user_model()
+        chat_id = query.from_user.id
+        bots_onwer = User.objects.get(owner_chat_id=chat_id)
+        
+        bot.edit_message_reply_markup(
+            chat_id=chat_id,
+            message_id=query.message.message_id,
+            reply_markup=bots_onwer.get_payment_link_menu()
+        )
+    except Exception as e:
+        print(e)
