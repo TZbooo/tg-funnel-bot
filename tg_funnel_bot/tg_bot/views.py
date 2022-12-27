@@ -118,6 +118,10 @@ class StripeUpdatesAPIView(APIView):
             User.objects.get(
                 owner_chat_id=bots_owner_chat_id
             ).switch_to_paid_rate().save()
+            bot.send_message(
+                chat_id=bots_owner_chat_id,
+                text='спасибо, что оформили платную подписку'
+            )
 
         return Response(status=200)
 
