@@ -5,6 +5,10 @@ from . import models
 
 
 admin.site.unregister(Group)
+admin.site.site_header = 'Панель управления Гермес'
+admin.site.site_title = 'Данные ваших клиентов и настройки ботов-воронок'
+admin.site.index_title = 'Панель управления'
+admin.site.site_url = None
 
 
 @admin.register(models.CustomUser)

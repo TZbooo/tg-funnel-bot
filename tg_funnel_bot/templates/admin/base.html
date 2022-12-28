@@ -1,0 +1,7 @@
+{% extends "admin/base.html" %}
+{% load static %}
+{% block footer %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'js/lib/jquery-3.6.3.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'admin/js/base-custom.js' %}"></script>
+{% endblock  %} 

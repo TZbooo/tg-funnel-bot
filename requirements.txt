@@ -10,7 +10,7 @@ click-didyoumean==0.3.0
 click-plugins==1.1.1
 click-repl==0.2.0
 Django==4.1.4
-django-better-admin-arrayfield==1.4.2
+django-better-admin-arrayfield @ git+https://github.com/TZbooo/django-better-admin-arrayfield.git@f3fd694575ab629afd8af89966827646a19d48d7
 django-celery-beat==2.4.0
 django-environ==0.9.0
 django-filter==22.1

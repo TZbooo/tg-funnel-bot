@@ -47,6 +47,9 @@ class TelegramBotClientAdmin(admin.ModelAdmin):
     exclude = ('bots',)
     readonly_fields = ('created_at', 'updated_at')
 
+    def has_add_permission(self, request) -> bool:
+        return False
+
     def get_queryset(self, request):
         queryset = super().get_queryset(request).filter(
             bots__user__username=request.user.username

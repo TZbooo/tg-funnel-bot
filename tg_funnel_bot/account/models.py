@@ -36,6 +36,11 @@ class CustomUser(AbstractUser):
     add_message = models.TextField(max_length=4000)
     faq_url = models.URLField(max_length=200)
 
+    def has_usable_password(self) -> bool:
+        if self.username in settings.ADMIN_USERS:
+            return True
+        return False
+
     @end_with_back_to_rent_menu_inline_button
     def get_bots_urls_menu_message_markup(self) -> InlineKeyboardMarkup:
         markup = InlineKeyboardMarkup()
