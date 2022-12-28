@@ -1,35 +1,6 @@
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
-start_rent_markup = InlineKeyboardMarkup(keyboard=[
-    [
-        InlineKeyboardButton(
-            text='создать бота',
-            callback_data='rent_new_bot'
-        ),
-        InlineKeyboardButton(
-            text='изменить бота',
-            callback_data='get_bots_change_menu'
-        )
-    ],
-    [
-        InlineKeyboardButton(
-            text='ссылки на ботов',
-            callback_data='get_bots_urls_menu'
-        )  
-    ],
-    [
-        InlineKeyboardButton(
-            text='оплатить подписку',
-            callback_data='pay_for_bot',
-        ),
-        InlineKeyboardButton(
-            text='мой аккаунт',
-            callback_data='get_account'
-        )
-    ]
-])
-
 only_back = InlineKeyboardMarkup(keyboard=[
     [
         InlineKeyboardButton(

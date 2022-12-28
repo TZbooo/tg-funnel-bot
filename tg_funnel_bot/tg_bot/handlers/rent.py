@@ -1,6 +1,6 @@
 import uuid
 
-from telebot.types import Message, CallbackQuery, InlineKeyboardButton
+from telebot.types import Message, CallbackQuery
 from django.utils.crypto import get_random_string
 from django.contrib.auth import get_user_model
 from django.conf import settings
@@ -8,7 +8,7 @@ from django.conf import settings
 from tg_funnel_bot.bot import bot
 from tg_bot.models import BotMessagesSettingsModel
 from tg_bot.utils import set_last_message_id
-from tg_bot.keyboards.inline import start_rent_markup, only_back
+from tg_bot.keyboards.inline import only_back
 
 
 def start_rent(message: Message):
@@ -22,12 +22,7 @@ def start_rent(message: Message):
         sended_message = bot.send_message(
             chat_id=chat_id,
             text='Создай свою воронку продаж',
-            reply_markup=start_rent_markup.add(
-                InlineKeyboardButton(
-                    text='faq',
-                    url=admin_user.faq_url
-                )
-            )
+            reply_markup=admin_user.get_start_rent_menu_markup()
         )
         password = get_random_string(length=20)
         if not User.objects.filter(
@@ -48,12 +43,17 @@ def start_rent(message: Message):
 
 
 def back_to_rent_menu(query: CallbackQuery):
+    User = get_user_model()
     chat_id = query.from_user.id
+    admin_user = User.objects.filter(
+        username__in=settings.ADMIN_USERS
+    ).first()
+
     bot.edit_message_text(
         chat_id=chat_id,
         message_id=query.message.message_id,
         text='Создай свою воронку продаж',
-        reply_markup=start_rent_markup
+        reply_markup=admin_user.get_start_rent_menu_markup()
     )
 
 

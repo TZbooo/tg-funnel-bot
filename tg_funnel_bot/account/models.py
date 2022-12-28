@@ -60,6 +60,42 @@ class CustomUser(AbstractUser):
             )
         return markup
 
+    def get_start_rent_menu_markup(self) -> InlineKeyboardMarkup:
+        return InlineKeyboardMarkup(keyboard=[
+            [
+                InlineKeyboardButton(
+                    text='создать бота',
+                    callback_data='rent_new_bot'
+                ),
+                InlineKeyboardButton(
+                    text='изменить бота',
+                    callback_data='get_bots_change_menu'
+                )
+            ],
+            [
+                InlineKeyboardButton(
+                    text='ссылки на ботов',
+                    callback_data='get_bots_urls_menu'
+                )  
+            ],
+            [
+                InlineKeyboardButton(
+                    text='оплатить подписку',
+                    callback_data='pay_for_bot',
+                ),
+                InlineKeyboardButton(
+                    text='мой аккаунт',
+                    callback_data='get_account'
+                )
+            ],
+            [
+                InlineKeyboardButton(
+                    text='faq',
+                    url=f'{self.faq_url}',
+                )
+            ]
+        ])
+
     def get_payment_link(self) -> str:
         payment_link = stripe.PaymentLink.create(
             line_items=[{

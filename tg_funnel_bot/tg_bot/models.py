@@ -35,9 +35,12 @@ class BotMessagesSettingsModel(models.Model):
     )
     first_question_buttons_text = ArrayField(
         models.CharField(max_length=50),
-        verbose_name=_('Список кнопок с вариантами ответов для первого вопроса')
+        verbose_name=_('Список кнопок с вариантами ответов для первого вопроса'),
     )
-    second_question_text = models.TextField(max_length=4000)
+    second_question_text = models.TextField(
+        _('Текст второго вопроса'),
+        max_length=4000
+    )
     third_question_text = models.TextField(
         _('Текст третьего вопроса'),
         max_length=4000
