@@ -1,0 +1,10 @@
+[Unit]
+Description=hermes telegram celery tasks
+
+[Service]
+User=root
+WorkingDirectory=/root/telegram-bots/hermes/tg_funnel_bot/
+ExecStart=/bin/bash -c "../venv/bin/celery -A tg_funnel_bot worker -l info -B"
+
+[Install]
+WantedBy=multi-user.target
