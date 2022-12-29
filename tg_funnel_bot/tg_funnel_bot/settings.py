@@ -151,7 +151,7 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_BEAT_SCHEDULE = {
     'send_certain_messages_for_inactive_users': {
         'task': 'send_certain_messages_for_inactive_users',
-        'schedule': tz.timedelta(minutes=2)
+        'schedule': tz.timedelta(minutes=10)
     }
 }
 

@@ -133,15 +133,15 @@ def send_certain_messages_for_inactive_users():
         phone_or_nickname=None
     )
     inactive_for_two_days_clients = no_nick_or_phone_clients.filter(
-        updated_at__lte=tz.now() - tz.timedelta(minutes=5),
+        updated_at__lte=tz.now() - tz.timedelta(days=2),
         sent_messages_for_inactive_count=2
     )
     inactive_for_day_clients = no_nick_or_phone_clients.filter(
-        updated_at__lte=tz.now() - tz.timedelta(minutes=3),
+        updated_at__lte=tz.now() - tz.timedelta(days=1),
         sent_messages_for_inactive_count=1
     ).difference(inactive_for_two_days_clients)
     inactive_for_hour_clients = no_nick_or_phone_clients.filter(
-        updated_at__lte=tz.now() - tz.timedelta(minutes=2),
+        updated_at__lte=tz.now() - tz.timedelta(hours=1),
         sent_messages_for_inactive_count=0
     ).difference(inactive_for_day_clients)
 
