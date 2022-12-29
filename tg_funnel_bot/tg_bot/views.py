@@ -2,6 +2,7 @@ import django.utils.timezone as tz
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from telebot.types import Update
+from telebot.apihelper import ApiTelegramException
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from celery import shared_task
@@ -147,40 +148,49 @@ def send_certain_messages_for_inactive_users():
     for inactive_client in inactive_for_hour_clients:
         for bot_settings in inactive_client.bots.all():
             chat_id = inactive_client.chat_id
-            bot.send_message(
-                chat_id=chat_id,
-                text=bot_settings.user_inactive_for_hour_message_text_first_part
-            )
-            bot.send_message(
-                chat_id=chat_id,
-                text=bot_settings.user_inactive_for_hour_message_text_second_part,
-                reply_markup=bot_settings.get_inactive_message_markup()
-            )
+            try:
+                bot.send_message(
+                    chat_id=chat_id,
+                    text=bot_settings.user_inactive_for_hour_message_text_first_part
+                )
+                bot.send_message(
+                    chat_id=chat_id,
+                    text=bot_settings.user_inactive_for_hour_message_text_second_part,
+                    reply_markup=bot_settings.get_inactive_message_markup()
+                )
+            except ApiTelegramException as e:
+                print(e)
             inactive_client.sent_messages_for_inactive_count += 1
             inactive_client.save()
 
     for inactive_client in inactive_for_day_clients:
         for bot_settings in inactive_client.bots.all():
             chat_id = inactive_client.chat_id
-            bot.send_message(
-                chat_id=chat_id,
-                text=bot_settings.user_inactive_for_day_message_text_first_part,
-                reply_markup=bot_settings.get_inactive_message_markup()
-            )
-            bot.send_message(
-                chat_id=chat_id,
-                text=bot_settings.user_inactive_for_day_message_text_second_part
-            )
+            try:
+                bot.send_message(
+                    chat_id=chat_id,
+                    text=bot_settings.user_inactive_for_day_message_text_first_part,
+                    reply_markup=bot_settings.get_inactive_message_markup()
+                )
+                bot.send_message(
+                    chat_id=chat_id,
+                    text=bot_settings.user_inactive_for_day_message_text_second_part
+                )
+            except ApiTelegramException as e:
+                print(e)
             inactive_client.sent_messages_for_inactive_count += 1
             inactive_client.save()
 
     for inactive_client in inactive_for_two_days_clients:
         for bot_settings in inactive_client.bots.all():
             chat_id = inactive_client.chat_id
-            bot.send_message(
-                chat_id=chat_id,
-                text=bot_settings.user_inactive_for_two_days_message_text
-            )
+            try:
+                bot.send_message(
+                    chat_id=chat_id,
+                    text=bot_settings.user_inactive_for_two_days_message_text
+                )
+            except ApiTelegramException as e:
+                print(e)
             inactive_client.sent_messages_for_inactive_count += 1
             inactive_client.save()
     return tz.now()
