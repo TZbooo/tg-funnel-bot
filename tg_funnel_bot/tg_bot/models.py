@@ -141,6 +141,12 @@ class BotMessagesSettingsModel(models.Model):
             self.third_question_text
         ))) < 3:
             raise ValidationError(_('Вопросы должны быть не одинаковы'))
+        if not self.bot_username.isascii():
+            raise ValidationError(_('Вы не можете использовать символы юникод в имени бота'))
+        if ' ' in self.bot_username:
+            raise ValidationError(_('Вы не можете использовать пробелы в имени бота'))
+        if '_' in self.bot_username:
+            raise ValidationError(_('Вы не можете использовать подчёркивание в имени бота'))
         return super().clean()
 
     class Meta:

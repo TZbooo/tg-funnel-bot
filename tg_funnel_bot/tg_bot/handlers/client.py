@@ -43,9 +43,9 @@ def first_question_handler(query: CallbackQuery):
     try:
         chat_id = query.from_user.id
         bot_username = get_bot_query_argument(query)
-        bot_messages_settings = BotMessagesSettingsModel.objects.filter(
+        bot_messages_settings = BotMessagesSettingsModel.objects.get(
             bot_username=bot_username
-        ).first()
+        )
         first_question_text = bot_messages_settings.first_question_text
         bot.edit_message_text(
             text=first_question_text,
