@@ -145,45 +145,42 @@ def send_certain_messages_for_inactive_users():
     ).difference(inactive_for_day_clients)
 
     for inactive_client in inactive_for_hour_clients:
-        for bot_settings in inactive_for_hour_clients.bots.all():
-            if inactive_client in bot_settings.clients:
-                chat_id = inactive_client.chat_id
-                bot.send_message(
-                    chat_id=chat_id,
-                    text=bot_settings.user_inactive_for_hour_message_text_first_part
-                )
-                bot.send_message(
-                    chat_id=chat_id,
-                    text=bot_settings.user_inactive_for_hour_message_text_second_part,
-                    reply_markup=bot_settings.get_inactive_message_markup()
-                )
-                inactive_client.sent_messages_for_inactive_count += 1
-                inactive_client.save()
+        for bot_settings in inactive_client.bots.all():
+            chat_id = inactive_client.chat_id
+            bot.send_message(
+                chat_id=chat_id,
+                text=bot_settings.user_inactive_for_hour_message_text_first_part
+            )
+            bot.send_message(
+                chat_id=chat_id,
+                text=bot_settings.user_inactive_for_hour_message_text_second_part,
+                reply_markup=bot_settings.get_inactive_message_markup()
+            )
+            inactive_client.sent_messages_for_inactive_count += 1
+            inactive_client.save()
 
     for inactive_client in inactive_for_day_clients:
-        for bot_settings in inactive_for_day_clients.bots.all():
-            if inactive_client in bot_settings.clients:
-                chat_id = inactive_client.chat_id
-                bot.send_message(
-                    chat_id=chat_id,
-                    text=bot_settings.user_inactive_for_day_message_text_first_part,
-                    reply_markup=bot_settings.get_inactive_message_markup()
-                )
-                bot.send_message(
-                    chat_id=chat_id,
-                    text=bot_settings.user_inactive_for_day_message_text_second_part
-                )
-                inactive_client.sent_messages_for_inactive_count += 1
-                inactive_client.save()
+        for bot_settings in inactive_client.bots.all():
+            chat_id = inactive_client.chat_id
+            bot.send_message(
+                chat_id=chat_id,
+                text=bot_settings.user_inactive_for_day_message_text_first_part,
+                reply_markup=bot_settings.get_inactive_message_markup()
+            )
+            bot.send_message(
+                chat_id=chat_id,
+                text=bot_settings.user_inactive_for_day_message_text_second_part
+            )
+            inactive_client.sent_messages_for_inactive_count += 1
+            inactive_client.save()
 
     for inactive_client in inactive_for_two_days_clients:
-        for bot_settings in inactive_for_two_days_clients.bots.all():
-            if inactive_client in bot_settings.clients:
-                chat_id = inactive_client.chat_id
-                bot.send_message(
-                    chat_id=chat_id,
-                    text=bot_settings.user_inactive_for_two_days_message_text
-                )
-                inactive_client.sent_messages_for_inactive_count += 1
-                inactive_client.save()
+        for bot_settings in inactive_client.bots.all():
+            chat_id = inactive_client.chat_id
+            bot.send_message(
+                chat_id=chat_id,
+                text=bot_settings.user_inactive_for_two_days_message_text
+            )
+            inactive_client.sent_messages_for_inactive_count += 1
+            inactive_client.save()
     return tz.now()
