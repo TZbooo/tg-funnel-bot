@@ -138,8 +138,9 @@ class BotMessagesSettingsModel(models.Model):
         if len(set((
             self.first_question_text,
             self.second_question_text,
-            self.third_question_text
-        ))) < 3:
+            self.third_question_text,
+            self.after_data_loading_text
+        ))) < 4:
             raise ValidationError(_('Вопросы должны быть не одинаковы'))
         if not self.bot_username.isascii():
             raise ValidationError(_('Вы не можете использовать символы юникод в имени бота'))
