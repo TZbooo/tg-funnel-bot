@@ -50,6 +50,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'django_better_admin_arrayfield',
+    'admin_reorder',
+    'django_admin_logs',
 
     'tg_bot',
     'account',
@@ -63,6 +65,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'admin_reorder.middleware.ModelAdminReorder',
 ]
 
 ROOT_URLCONF = 'tg_funnel_bot.urls'
@@ -165,3 +169,12 @@ STRIPE_ENDPOINT_SECRET = env('STRIPE_WEBHOOK_ENDPOINT_SECRET')
 STRIPE_PRICE_ID = env('STRIPE_PRICE_ID')
 
 ADMIN_USERS = ['admin']
+
+ADMIN_REORDER = (
+    # Keep original label and models
+    'sites',
+    {'app': 'account', 'label': 'Аккаунты', 'models': ('account.CustomUser',)},
+    {'app': 'tg_bot', 'label': 'Телеграм бот', 'models': ('tg_bot.BotMessagesSettingsModel', 'tg_bot.TelegramBotClientModel')},
+)
+
+DJANGO_ADMIN_LOGS_ENABLED = False
