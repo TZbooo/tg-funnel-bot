@@ -2,10 +2,10 @@ const replaceElementText = (selector, text, new_text) => {
     $(selector).text($(selector).text().replace(text, new_text))
 }
 
-$(() => {
+document.addEventListener('DOMContentLoaded', () => {
     $('.model-telegrambotclientmodel .changelink').hide()
 
-    $('.model-botmessagessettingsmodel > td > .addlink').text('создать нового бота')
+    $('.model-botmessagessettingsmodel > td > .addlink,.object-tools > li > .addlink').text('создать нового бота')
     $('.model-botmessagessettingsmodel .changelink').text('изменить настройки вопросов бота')
 
     $('#logout-form button[type="submit"]').text('выйти')
